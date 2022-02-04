@@ -48,8 +48,9 @@ def gen_matrix(path):
 # takes in the path to file (path), a list to store vertices (vertex_list)
 # and a dictionary to store neighbors (neighbors = {Vertex:[Vertex]})
 # returns 3 tuples, start point, end point, and max grid dimensions
-def gen_grid(path, vertex_list, neighbors, cell_mat):
-    print(cell_mat)
+def gen_grid(path, vertex_list, neighbors):
+
+    cell_mat, grid_max = gen_matrix(path)
     with open(path) as file:
         line = file.readline()
         temp = line.split()
@@ -93,11 +94,7 @@ def gen_grid(path, vertex_list, neighbors, cell_mat):
                     neighbors[vertex2].append(vertex1)
 
             # left edge
-            if (vertex1 == (2,2)):
-                print("hola")
             if not (cell_mat[vertex1[1]][vertex1[0]] == 1 and cell_mat[vertex1[1]][vertex1[0]-1] == 1):
-                if (vertex1 == (2,2)):
-                    print("hola2")
                 if vertex3 not in neighbors[vertex1]:
                     neighbors[vertex1].append(vertex3)
                 if vertex1 not in neighbors[vertex3]:
@@ -132,19 +129,21 @@ def gen_grid(path, vertex_list, neighbors, cell_mat):
 
             line = file.readline()
 
-    return start, end, grid_max
+    return start, end, grid_max, cell_mat
 
 # testing purposes
 def main():
-    cell_matrix, grid_max = gen_matrix("/common/home/sk2048/Desktop/cs440/a1/test/testfile1.txt")
-    # print(cell_matrix)
-    start, end, grid_max = gen_grid("/common/home/sk2048/Desktop/cs440/a1/test/testfile1.txt", vertex_list, neighbors, cell_matrix)
-    # print(start)
-    # print(end)
-    # print(grid_max)
-    # vertex_list.sort()
-    # print(vertex_list)
-    # print()
+    start, end, grid_max, cell_matrix = gen_grid("/common/home/sk2048/Desktop/cs440/a1/test/testfile1.txt", vertex_list, neighbors)
+    print("start vertex: " + str(start))
+    print("end vertex: " + str(end))
+    print("max dimensions: " + str(grid_max), end="\n\n")
+    print("cell matrix")
+    print(cell_matrix, end="\n\n")
+    vertex_list.sort()
+    print("vertex list: ", end="")
+    print(vertex_list)
+    print()
+    print("adjacency list:")
     for key in neighbors:
         print(str(key) + " : " + str(neighbors[key]))
     return
