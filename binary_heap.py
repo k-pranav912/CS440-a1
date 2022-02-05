@@ -1,3 +1,7 @@
+def get_f_value(vertex, graph_values):
+    x,y = graph_values[vertex]
+    return x+y
+
 def parent(index):
     return (index-1)/2
 
@@ -25,25 +29,25 @@ def extract_min(list):
 
     return root
 
-def insert(list, value):
+def insert(list, value, graph_values):
     list.append(value)
 
     i = len(list)-1
-    while i != 0 and list[parent(i)] > list[i]:
+    while i != 0 and get_f_value(list[parent(i)], graph_values) > get_f_value(list[i], graph_values):
         list[parent(i)], list[i] = list[i], list[parent(i)]
 
 def delete(list, index):
     return
 
-def min_heapify(list, index):
+def min_heapify(list, index, graph_values):
     size = len(list)
     left = left_child(index)
     right = right_child(index)
     smallest = index
 
-    if left < size - 1 and list[left] < list[index]:
+    if left < size - 1 and get_f_value(list[left], graph_values) < get_f_value(list[index], graph_values):
         smallest = left
-    if right < size - 1 and list[right] < list[index]:
+    if right < size - 1 and get_f_value(list[right], graph_values) < get_f_value(list[index], graph_values):
         smallest = right
     if smallest != index:
         list[smallest], list[index] = list[index], list[smallest]
