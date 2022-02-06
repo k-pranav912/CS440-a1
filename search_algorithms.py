@@ -167,7 +167,7 @@ def theta_star(start, end, neighbors):
 # testing
 def main():
     vertex_list = []
-    filepath = "/common/home/sk2048/Desktop/cs440/a1/test/testfile2.txt"
+    filepath = "./Grids/Grid0.txt"
     neighbors = {}
 
     start, end, grid_max, cell_mat = grid_gen.gen_grid(filepath, vertex_list, neighbors)
@@ -183,21 +183,29 @@ def main():
     print("start: " + str(start))
     print("end: " + str(end))
 
-    result, parent = a_star(start, end, neighbors)
-
-    print("result: " + result)
+    # print("result: " + result)
 
     # print("parents list")
     # for key in parent:
     #     print(str(key) + ": " + str(parent[key]))
 
-    print("path:")
-    vert = end
+    print("-------------------")
 
-    print(vert)
-    while vert != start:
-        print(parent[vert])
-        vert = parent[vert]
+    path = []
+    found, parent = a_star(start, end, neighbors)
+    if not found:
+        print("Not Found")
+    else:
+        temp = end
+        while not temp == start:
+            path.append(temp)
+            temp = parent[temp]
+        path.append(temp)
+        path.reverse()
+        for vert in path:
+            print(vert)
+
+    print("-------------------")
 
     path = []
     found, parent = theta_star(start, end, neighbors)
@@ -213,9 +221,7 @@ def main():
         for vert in path:
             print(vert)
 
-
-
-
+    print("-------------------")
 
 if __name__ == "__main__":
     main()
