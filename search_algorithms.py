@@ -1,5 +1,6 @@
 import binary_heap as bh
 import math
+import grid_gen
 
 def bfs(start, end, neighbors, vertex_list):
     if start == end: return True
@@ -37,8 +38,9 @@ def straight_line_distance(vertex1, vertex2):
 
 def update_vertex(vertex, successor, values, parent, fringe):
     temp = values[vertex][0] + straight_line_distance(vertex, successor)
-    if temp < values[successor][1]:
-        values[successor][0] = temp
+    temp2 = values[successor][0]
+    if temp < temp2:
+        values[successor] = (temp, values[successor][1])
         parent[successor] = vertex
         if successor in fringe:
             bh.remove(fringe, successor, values)
@@ -59,14 +61,16 @@ def aStar(start, end, neighbors):
     while len(fringe) != 0:
         temp_vertex = bh.pop(fringe, values)
         if (temp_vertex == end):
-            return "path found"
+            return "found", parent
         visited.append(temp_vertex)
         for successor in neighbors[temp_vertex]:
             if successor not in visited:
                 if successor not in fringe:
-                    values[successor] = (float("inf"), heuristic_distance)
+                    values[successor] = (float("inf"), heuristic_distance(successor, end))
                     parent[successor] = None
-                update_vertex(temp_vertex, successor)
+                update_vertex(temp_vertex, successor, values, parent, fringe)
+    
+    return "not found", parent
 
 def thetaStar():
     pass
@@ -74,3 +78,43 @@ def thetaStar():
 def lineOfSight():
     pass
 
+# testing
+def main():
+    vertex_list = []
+    filepath = "/common/home/sk2048/Desktop/cs440/a1/test/testfile2.txt"
+    neighbors = {}
+
+    start, end, grid_max, cell_mat = grid_gen.gen_grid(filepath, vertex_list, neighbors)
+
+    # print("vertices:")
+    # print(vertex_list, end="\n\n")
+
+    # print("adjacency list:")
+    # for key in neighbors:
+    #     print(str(key) + ": " + str(neighbors[key]))
+
+    print(cell_mat)
+    print("start: " + str(start))
+    print("end: " + str(end))
+
+    result, parent = aStar(start, end, neighbors)
+
+    print("result: " + result)
+
+    # print("parents list")
+    # for key in parent:
+    #     print(str(key) + ": " + str(parent[key]))
+
+    print("path:")
+    vert = end
+
+    print(vert)
+    while vert != start:
+        print(parent[vert])
+        vert = parent[vert]
+
+
+
+
+if __name__ == "__main__":
+    main()
