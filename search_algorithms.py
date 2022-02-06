@@ -61,7 +61,7 @@ def a_star(start, end, neighbors):
     while len(fringe) != 0:
         temp_vertex = bh.pop(fringe, values)
         if (temp_vertex == end):
-            return "found", parent
+            return True, parent
         visited.append(temp_vertex)
         for successor in neighbors[temp_vertex]:
             if successor not in visited:
@@ -70,7 +70,7 @@ def a_star(start, end, neighbors):
                     parent[successor] = None
                 update_vertex(temp_vertex, successor, values, parent, fringe)
     
-    return "not found", parent
+    return False, parent
 
 def line_of_sight(vertex1, vertex2, cell_mat):
     x0, y0 = vertex1
@@ -153,7 +153,7 @@ def theta_star(start, end, neighbors):
     while len(fringe) != 0:
         temp_vertex = bh.pop(fringe, values)
         if (temp_vertex == end):
-            return "found", parent
+            return True, parent
         visited.append(temp_vertex)
         for successor in neighbors[temp_vertex]:
             if successor not in visited:
@@ -162,7 +162,7 @@ def theta_star(start, end, neighbors):
                     parent[successor] = None
                 update_vertex(temp_vertex, successor, values, parent, fringe)
     
-    return "not found", parent
+    return False, parent
 
 # testing
 def main():
@@ -198,6 +198,21 @@ def main():
     while vert != start:
         print(parent[vert])
         vert = parent[vert]
+
+    path = []
+    found, parent = theta_star(start, end, neighbors)
+    if not found:
+        print("Not Found")
+    else:
+        temp = end
+        while not temp == start:
+            path.append(temp)
+            temp = parent[temp]
+        path.append(temp)
+        path.reverse()
+        for vert in path:
+            print(vert)
+
 
 
 
