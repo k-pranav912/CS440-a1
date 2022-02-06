@@ -47,7 +47,7 @@ def update_vertex(vertex, successor, values, parent, fringe):
         bh.insert(fringe, successor, values)
 
 
-def aStar(start, end, neighbors):
+def a_star(start, end, neighbors):
     values = {}
     visited = []
     parent = {}
@@ -72,11 +72,97 @@ def aStar(start, end, neighbors):
     
     return "not found", parent
 
-def thetaStar():
-    pass
+def line_of_sight(vertex1, vertex2, cell_mat):
+    x0, y0 = vertex1
+    x1, y1 = vertex2
+    f = 0
+    dY = y1-y0
+    dX = x1-x0
 
-def lineOfSight():
-    pass
+    if dY < 0:
+        dY = 0-dY
+        sY = -1
+    else:
+        sY = 1
+
+    if dX < 0:
+        dX = 0-dX
+        sX = -1
+    else:
+        sX = 1
+
+    if dX >= dY:
+        while x0 != x1:
+            f += dY
+            if f >= dX:
+                if cell_mat[y0+((sY-1)//2)][x0 + ((sX-1)//2)]:
+                    return False
+                y0 = y0 + sX
+                f -= dX
+            if (f != 0) and cell_mat[y0+((sY-1)//2)][x0 + ((sX-1)//2)]:
+                return False
+            if (dY == 0) and cell_mat[y0][x0 + ((sX-1)//2)] and cell_mat[y0-1][x0 + ((sX-1)//2)]:
+                return False
+            x0 = x0 + sX
+    else:
+        while y0 != y1:
+            f += dX
+            if f >= dY:
+                if cell_mat[y0+((sY-1)//2)][x0+((sX-1)//2)]:
+                    return False
+                x0 += sX
+                f -= dY
+            if (f != 0) and cell_mat[y0+((sY-1)//2)][x0+((sX-1)//2)]:
+                return False
+            if (dX == 0) and cell_mat[y0+((sY-1)//2)][x0] and cell_mat[y0+((sY-1)//2)][x0-1]:
+                return False
+            y0 = y0+sY
+    return True
+
+def update_vertex_theta_star(vertex, successor, values, parent, fringe):
+    if line_of_sight(parent[vertex], successor):
+        # path 2
+        if values[parent[vertex]][0] + straight_line_distance(parent[vertex], successor) < values[successor][0]:
+            values[successor] = values[parent[vertex]] + straight_line_distance(parent[vertex], successor)
+            parent[successor] = parent[vertex]
+
+            if successor in fringe:
+                bh.remove(fringe, successor, values)
+            
+            bh.insert(fringe, successor, values)
+    else:
+        # path 1
+        if values[vertex][0] + straight_line_distance(vertex, successor) < values[successor][0]:
+            values[successor][0] = values[vertex][0] + straight_line_distance(vertex, successor)
+            parent[successor] = vertex
+            if successor in fringe:
+                bh.remove(fringe, successor, values)
+            bh.insert(fringe, successor, values)
+
+def theta_star(start, end, neighbors):
+    values = {}
+    visited = []
+    parent = {}
+    fringe = []
+
+    values[start] = (0, heuristic_distance(start, end))
+    parent[start] = start
+
+    bh.insert(fringe, start, values)
+
+    while len(fringe) != 0:
+        temp_vertex = bh.pop(fringe, values)
+        if (temp_vertex == end):
+            return "found", parent
+        visited.append(temp_vertex)
+        for successor in neighbors[temp_vertex]:
+            if successor not in visited:
+                if successor not in fringe:
+                    values[successor] = (float("inf"), heuristic_distance(successor, end))
+                    parent[successor] = None
+                update_vertex(temp_vertex, successor, values, parent, fringe)
+    
+    return "not found", parent
 
 # testing
 def main():
@@ -97,7 +183,7 @@ def main():
     print("start: " + str(start))
     print("end: " + str(end))
 
-    result, parent = aStar(start, end, neighbors)
+    result, parent = a_star(start, end, neighbors)
 
     print("result: " + result)
 
