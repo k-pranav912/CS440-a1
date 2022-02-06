@@ -51,6 +51,7 @@ def main():
 
         print("-----------------------")
 
+        path = []
         found, parent = search_algorithms.theta_star(start, end, neighbors)
         if not found:
             print("Not Found")
