@@ -96,15 +96,12 @@ def line_of_sight(vertex1, vertex2, cell_mat):
             f += dY
             if f >= dX:
                 if cell_mat[y0+((sY-1)//2)][x0 + ((sX-1)//2)]:
-                    print("a")
                     return False
-                y0 = y0 + sX
+                y0 += sY
                 f -= dX
             if (f != 0) and cell_mat[y0+((sY-1)//2)][x0 + ((sX-1)//2)]:
-                print("b")
                 return False
             if (dY == 0) and cell_mat[y0][x0 + ((sX-1)//2)] and cell_mat[y0-1][x0 + ((sX-1)//2)]:
-                print("c")
                 return False
             x0 = x0 + sX
     else:
@@ -120,14 +117,16 @@ def line_of_sight(vertex1, vertex2, cell_mat):
                 print("e")
                 return False
             if (dX == 0) and cell_mat[y0+((sY-1)//2)][x0] and cell_mat[y0+((sY-1)//2)][x0-1]:
-                print("a")
+                print("f")
                 return False
             y0 = y0+sY
     return True
 
 def update_vertex_theta_star(vertex, successor, values, parent, fringe, cell_mat):
+    # print(vertex, successor)
     if line_of_sight(parent[vertex], successor, cell_mat):
         # path 2
+        # print("path 2")
         if values[parent[vertex]][0] + straight_line_distance(parent[vertex], successor) < values[successor][0]:
             values[successor] = (values[parent[vertex]][0] + straight_line_distance(parent[vertex], successor), values[successor][1])
             parent[successor] = parent[vertex]
@@ -138,6 +137,7 @@ def update_vertex_theta_star(vertex, successor, values, parent, fringe, cell_mat
             bh.insert(fringe, successor, values)
     else:
         # path 1
+        # print("path 1")
         if values[vertex][0] + straight_line_distance(vertex, successor) < values[successor][0]:
             values[successor] = (values[vertex][0] + straight_line_distance(vertex, successor), values[successor][1])
             parent[successor] = vertex
@@ -166,18 +166,14 @@ def theta_star(start, end, neighbors, cell_mat):
                 if successor not in fringe:
                     values[successor] = (float("inf"), straight_line_distance(successor, end))
                     parent[successor] = None
-<<<<<<< HEAD
                 update_vertex_theta_star(temp_vertex, successor, values, parent, fringe, cell_mat)
-=======
-                update_vertex_theta_star(temp_vertex, successor, values, parent, fringe)
->>>>>>> 6191bb3a321b4b147aa6be927a44ee3d87500feb
     
     return False, parent
 
 # testing
 def main():
     vertex_list = []
-    filepath = "./Grids/Grid0.txt"
+    filepath = "./Grids/grid_test_1.txt"
     neighbors = {}
 
     start, end, grid_max, cell_mat = grid_gen.gen_grid(filepath, vertex_list, neighbors)
