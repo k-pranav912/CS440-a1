@@ -119,11 +119,11 @@ def line_of_sight(vertex1, vertex2, cell_mat):
             y0 = y0+sY
     return True
 
-def update_vertex_theta_star(vertex, successor, values, parent, fringe):
-    if line_of_sight(parent[vertex], successor):
+def update_vertex_theta_star(vertex, successor, values, parent, fringe, cell_mat):
+    if line_of_sight(parent[vertex], successor, cell_mat):
         # path 2
         if values[parent[vertex]][0] + straight_line_distance(parent[vertex], successor) < values[successor][0]:
-            values[successor] = values[parent[vertex]] + straight_line_distance(parent[vertex], successor)
+            values[successor] = (values[parent[vertex]][0] + straight_line_distance(parent[vertex], successor), values[successor][1])
             parent[successor] = parent[vertex]
 
             if successor in fringe:
@@ -133,19 +133,19 @@ def update_vertex_theta_star(vertex, successor, values, parent, fringe):
     else:
         # path 1
         if values[vertex][0] + straight_line_distance(vertex, successor) < values[successor][0]:
-            values[successor][0] = values[vertex][0] + straight_line_distance(vertex, successor)
+            values[successor] = (values[vertex][0] + straight_line_distance(vertex, successor), values[successor][1])
             parent[successor] = vertex
             if successor in fringe:
                 bh.remove(fringe, successor, values)
             bh.insert(fringe, successor, values)
 
-def theta_star(start, end, neighbors):
+def theta_star(start, end, neighbors, cell_mat):
     values = {}
     visited = []
     parent = {}
     fringe = []
 
-    values[start] = (0, heuristic_distance(start, end))
+    values[start] = (0, straight_line_distance(start, end))
     parent[start] = start
 
     bh.insert(fringe, start, values)
@@ -158,9 +158,9 @@ def theta_star(start, end, neighbors):
         for successor in neighbors[temp_vertex]:
             if successor not in visited:
                 if successor not in fringe:
-                    values[successor] = (float("inf"), heuristic_distance(successor, end))
+                    values[successor] = (float("inf"), straight_line_distance(successor, end))
                     parent[successor] = None
-                update_vertex(temp_vertex, successor, values, parent, fringe)
+                update_vertex_theta_star(temp_vertex, successor, values, parent, fringe, cell_mat)
     
     return False, parent
 
@@ -208,7 +208,7 @@ def main():
     print("-------------------")
 
     path = []
-    found, parent = theta_star(start, end, neighbors)
+    found, parent = theta_star(start, end, neighbors, cell_mat)
     if not found:
         print("Not Found")
     else:
