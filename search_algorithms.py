@@ -195,7 +195,7 @@ def main():
     print("-------------------")
 
     path = []
-    found, parent = a_star(start, end, neighbors)
+    found, parent, values = a_star(start, end, neighbors)
     if not found:
         print("Not Found")
     else:
@@ -207,6 +207,10 @@ def main():
         path.reverse()
         for vert in path:
             print(vert)
+        
+        print("values:")
+        for key in values:
+            print(str(key) + ": " + str(values[key]))
 
     print("-------------------")
 

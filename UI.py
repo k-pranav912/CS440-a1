@@ -10,6 +10,8 @@ class Grid(tk.Tk):
         self.columns = grid_max[0]
         self.cells = {}
         self.dots = {}
+        self.start = start
+        self.end = end
         self.path = path
         self.canvas.bind("<Configure>", self.draw_grid(blocked_cell,hg))
         self.status = tk.Label(self, anchor="w")
@@ -42,13 +44,13 @@ class Grid(tk.Tk):
         for c in range(len(self.path)-1):
             self.canvas.create_line(self.path[c][0]*12,self.path[c][1]*12,self.path[c+1][0]*12,self.path[c+1][1]*12,fill='red',width=2)
         for c in range(len(self.path)):
-            path_dot = self.canvas.create_oval(path[c][0]*12-3,path[c][1]*12-3,path[c][0]*12+3,path[c][1]*12+3,fill='yellow')
-            self.canvas.tag_bind(path_dot, "<Button-1>", lambda event, y = path[c][1], x=path[c][0]: self.btn(x, y,hg))
+            path_dot = self.canvas.create_oval(self.path[c][0]*12-3,self.path[c][1]*12-3,self.path[c][0]*12+3,self.path[c][1]*12+3,fill='yellow')
+            self.canvas.tag_bind(path_dot, "<Button-1>", lambda event, y = self.path[c][1], x=self.path[c][0]: self.btn(x, y,hg))
         
-        start_dot = self.canvas.create_oval(start[0]*12-4,start[1]*12-4,start[0]*12+4,start[1]*12+4,fill='Green')
-        self.canvas.tag_bind(start_dot, "<Button-1>", lambda event, y = start[1], x=start[0]: self.btn(x, y,hg))
-        end_dot = self.canvas.create_oval(end[0]*12-4,end[1]*12-4,end[0]*12+4,end[1]*12+4,fill='blue')
-        self.canvas.tag_bind(end_dot, "<Button-1>", lambda event, y = end[1], x=end[0]: self.btn(x, y,hg))
+        start_dot = self.canvas.create_oval(self.start[0]*12-4,self.start[1]*12-4,self.start[0]*12+4,self.start[1]*12+4,fill='Green')
+        self.canvas.tag_bind(start_dot, "<Button-1>", lambda event, y = self.start[1], x=self.start[0]: self.btn(x, y,hg))
+        end_dot = self.canvas.create_oval(self.end[0]*12-4,self.end[1]*12-4,self.end[0]*12+4,self.end[1]*12+4,fill='blue')
+        self.canvas.tag_bind(end_dot, "<Button-1>", lambda event, y = self.end[1], x=self.end[0]: self.btn(x, y,hg))
     def btn(self, x, y,hg):
         if((x,y) in hg):
             self.status.configure(text="vertex:(%s,%s)-> h: %s || g: %s || f: %s" % (x,y,hg[(x,y)][0],hg[(x,y)][1],hg[(x,y)][0] + hg[(x,y)][1]))
