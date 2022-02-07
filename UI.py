@@ -10,9 +10,9 @@ class Grid(tk.Tk):
         self.columns = grid_max[0]
         self.cells = {}
         self.dots = {}
+        self.path = path
         self.start = start
         self.end = end
-        self.path = path
         self.canvas.bind("<Configure>", self.draw_grid(blocked_cell,hg))
         self.status = tk.Label(self, anchor="w")
         self.status.pack(side="bottom", fill="x")
@@ -53,7 +53,7 @@ class Grid(tk.Tk):
         self.canvas.tag_bind(end_dot, "<Button-1>", lambda event, y = self.end[1], x=self.end[0]: self.btn(x, y,hg))
     def btn(self, x, y,hg):
         if((x,y) in hg):
-            self.status.configure(text="vertex:(%s,%s)-> h: %s || g: %s || f: %s" % (x,y,hg[(x,y)][0],hg[(x,y)][1],hg[(x,y)][0] + hg[(x,y)][1]))
+            self.status.configure(text="vertex:(%s,%s)-> g: %s || h: %s || f: %s" % (x,y,hg[(x,y)][0],hg[(x,y)][1],hg[(x,y)][0] + hg[(x,y)][1]))
 
 if __name__ == "__main__":
     start = (20,30)
