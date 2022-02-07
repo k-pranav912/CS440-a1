@@ -61,7 +61,7 @@ def a_star(start, end, neighbors):
     while len(fringe) != 0:
         temp_vertex = bh.pop(fringe, values)
         if (temp_vertex == end):
-            return True, parent
+            return True, parent, values
         visited.append(temp_vertex)
         for successor in neighbors[temp_vertex]:
             if successor not in visited:
@@ -70,7 +70,7 @@ def a_star(start, end, neighbors):
                     parent[successor] = None
                 update_vertex(temp_vertex, successor, values, parent, fringe)
     
-    return False, parent
+    return False, parent, values
 
 def line_of_sight(vertex1, vertex2, cell_mat):
     x0, y0 = vertex1
@@ -109,15 +109,12 @@ def line_of_sight(vertex1, vertex2, cell_mat):
             f += dX
             if f >= dY:
                 if cell_mat[y0+((sY-1)//2)][x0+((sX-1)//2)]:
-                    print("d")
                     return False
                 x0 += sX
                 f -= dY
             if (f != 0) and cell_mat[y0+((sY-1)//2)][x0+((sX-1)//2)]:
-                print("e")
                 return False
             if (dX == 0) and cell_mat[y0+((sY-1)//2)][x0] and cell_mat[y0+((sY-1)//2)][x0-1]:
-                print("f")
                 return False
             y0 = y0+sY
     return True
@@ -173,7 +170,7 @@ def theta_star(start, end, neighbors, cell_mat):
 # testing
 def main():
     vertex_list = []
-    filepath = "./Grids/grid_test_1.txt"
+    filepath = "./Grids/Grid0.txt"
     neighbors = {}
 
     start, end, grid_max, cell_mat = grid_gen.gen_grid(filepath, vertex_list, neighbors)

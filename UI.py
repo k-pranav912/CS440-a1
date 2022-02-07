@@ -9,6 +9,7 @@ class Grid(tk.Tk):
         self.rows = grid_max[1]
         self.columns = grid_max[0]
         self.cells = {}
+        self.path = path
         self.canvas.bind("<Configure>", self.draw_grid(blocked_cell,hg))
         self.status = tk.Label(self, anchor="w")
         self.status.pack(side="bottom", fill="x")
@@ -18,26 +19,27 @@ class Grid(tk.Tk):
         self.canvas.delete("r")
         w = 10
         h = 10
-        for column in range(1,self.columns+1):
-            for row in range(1,self.rows+1):
+        for column in range(1,self.columns+2):
+            for row in range(1,self.rows+2):
                 x1 = column*w
                 y1 = row * h
                 x2 = x1 + w
                 y2 = y1 + h
-                cell = self.canvas.create_rectangle(x1,y1,x2,y2, fill="yellow", tags="r")
+                if not row == self.rows+1 and not column == self.columns+1:
+                    cell = self.canvas.create_rectangle(x1,y1,x2,y2, fill="white", tags="r")
                 #cell.grid(row=row, column=column)
-                dot = self.canvas.create_oval(x1-2.5,y1-2.5,x1+2.5,y1+2.5,fill='blue')
+                dot = self.canvas.create_oval(x1-1.5,y1-1.5,x1+1.5,y1+1.5,fill='black')
                 self.cells[(row,column)] = cell
                 self.canvas.tag_bind(dot, "<Button-1>", lambda event, row=row, column=column: self.btn(row, column,hg))
                 #self.dots[row,column] = dot
         for b in range(len(blocked_cell)):
             cell = self.cells[blocked_cell[b]]
-            self.canvas.itemconfigure(cell, fill='bLACK')
+            self.canvas.itemconfigure(cell, fill='black')
         #l = [(1,1),(2,2),(2,2),(3,3)]
         #self.canvas.create_line(10,10,20,20,fill='red',width=2)
         #cells[3,4].configure(background="red")
-        for c in range(len(path)-1):
-            self.canvas.create_line(path[c][0]*10,path[c][1]*10,path[c+1][0]*10,path[c+1][1]*10,fill='red',width=2)
+        for c in range(len(self.path)-1):
+            self.canvas.create_line(self.path[c][0]*10,self.path[c][1]*10,self.path[c+1][0]*10,self.path[c+1][1]*10,fill='red',width=2)
     def btn(self, x, y,hg):
         if((x,y) in hg):
             self.status.configure(text="vertex:(%s,%s) h value: %s  g value: %s  f value : %s" % (x,y,hg[(x,y)][0],hg[(x,y)][1],hg[(x,y)][0] + hg[(x,y)][1]))
