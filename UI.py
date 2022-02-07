@@ -1,17 +1,17 @@
 import tkinter as tk
 
 class Grid(tk.Tk):
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+    def __init__(self,path,start,end,grid_max,blocked_cell):#blocked_cells_list
+        tk.Tk.__init__(self)
         #self.canvas = tk.Canvas(self, width=1000, height=1000, borderwidth=0, highlightthickness=0)
-        self.canvas = tk.Canvas(self, width=1010, height=510, borderwidth=0, highlightthickness=1)
+        self.canvas = tk.Canvas(self, width=(grid_max[0] * 10) + 10, height=(grid_max[1] * 10) + 10, borderwidth=0, highlightthickness=1)
         self.canvas.pack(side="top", fill="both", expand="true")
-        self.rows = 50
-        self.columns = 100
+        self.rows = grid_max[1]
+        self.columns = grid_max[0]
         self.cells = {}
-        self.canvas.bind("<Configure>", self.draw_grid)
+        self.canvas.bind("<Configure>", self.draw_grid(blocked_cell))
 
-    def draw_grid(self, event=None):
+    def draw_grid(self, blocked_cell,event=None):
         self.canvas.delete("r")
         w = 10
         h = 10
@@ -22,14 +22,24 @@ class Grid(tk.Tk):
                 x2 = x1 + w
                 y2 = y1 + h
                 cell = self.canvas.create_rectangle(x1,y1,x2,y2, fill="yellow", tags="r")
+                #cell.grid(row=row, column=column)
                 dot = self.canvas.create_oval(x1-1.5,y1-1.5,x1+1.5,y1+1.5,fill='blue')
-                self.cells[row,column] = cell
+                self.cells[(row,column)] = cell
                 #self.dots[row,column] = dot
-               
-        l = [(10,10),(20,20),(20,20),(30,30)]
+        for b in range(len(blocked_cell)):
+            cell = self.cells[blocked_cell[b]]
+            self.canvas.itemconfigure(cell, fill='red')
+        #l = [(1,1),(2,2),(2,2),(3,3)]
         #self.canvas.create_line(10,10,20,20,fill='red',width=2)
-        for c in range(len(l)):
-            self.canvas.create_line(l[c],l[c+1],fill='red',width=2)
+        #cells[3,4].configure(background="red")
+        for c in range(len(path)-1):
+            self.canvas.create_line(path[c],path[c+1],fill='red',width=2)
 
 if __name__ == "__main__":
-    Grid().mainloop()
+    start = 0
+    end = 0
+    t = [(1,1),(2,2),(2,2),(3,3)]
+    blocked_cell = [(3,4),(7,8),(1,1)]
+    x=10
+    [(path[0]*x, path[1]*x) for path in t]
+    Grid(path,start,end,(100,50),blocked_cell).mainloop()
