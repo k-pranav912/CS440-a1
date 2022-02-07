@@ -96,12 +96,15 @@ def line_of_sight(vertex1, vertex2, cell_mat):
             f += dY
             if f >= dX:
                 if cell_mat[y0+((sY-1)//2)][x0 + ((sX-1)//2)]:
+                    print("a")
                     return False
                 y0 = y0 + sX
                 f -= dX
             if (f != 0) and cell_mat[y0+((sY-1)//2)][x0 + ((sX-1)//2)]:
+                print("b")
                 return False
             if (dY == 0) and cell_mat[y0][x0 + ((sX-1)//2)] and cell_mat[y0-1][x0 + ((sX-1)//2)]:
+                print("c")
                 return False
             x0 = x0 + sX
     else:
@@ -109,12 +112,15 @@ def line_of_sight(vertex1, vertex2, cell_mat):
             f += dX
             if f >= dY:
                 if cell_mat[y0+((sY-1)//2)][x0+((sX-1)//2)]:
+                    print("d")
                     return False
                 x0 += sX
                 f -= dY
             if (f != 0) and cell_mat[y0+((sY-1)//2)][x0+((sX-1)//2)]:
+                print("e")
                 return False
             if (dX == 0) and cell_mat[y0+((sY-1)//2)][x0] and cell_mat[y0+((sY-1)//2)][x0-1]:
+                print("a")
                 return False
             y0 = y0+sY
     return True
@@ -160,7 +166,11 @@ def theta_star(start, end, neighbors, cell_mat):
                 if successor not in fringe:
                     values[successor] = (float("inf"), straight_line_distance(successor, end))
                     parent[successor] = None
+<<<<<<< HEAD
                 update_vertex_theta_star(temp_vertex, successor, values, parent, fringe, cell_mat)
+=======
+                update_vertex_theta_star(temp_vertex, successor, values, parent, fringe)
+>>>>>>> 6191bb3a321b4b147aa6be927a44ee3d87500feb
     
     return False, parent
 
