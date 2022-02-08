@@ -156,7 +156,7 @@ def theta_star(start, end, neighbors, cell_mat):
     while len(fringe) != 0:
         temp_vertex = bh.pop(fringe, values)
         if (temp_vertex == end):
-            return True, parent
+            return True, parent, values
         visited.append(temp_vertex)
         for successor in neighbors[temp_vertex]:
             if successor not in visited:
@@ -165,7 +165,7 @@ def theta_star(start, end, neighbors, cell_mat):
                     parent[successor] = None
                 update_vertex_theta_star(temp_vertex, successor, values, parent, fringe, cell_mat)
     
-    return False, parent
+    return False, parent, values
 
 # testing
 def main():
@@ -195,7 +195,7 @@ def main():
     print("-------------------")
 
     path = []
-    found, parent, values = a_star(start, end, neighbors)
+    found, parent = a_star(start, end, neighbors)
     if not found:
         print("Not Found")
     else:
@@ -207,10 +207,6 @@ def main():
         path.reverse()
         for vert in path:
             print(vert)
-        
-        print("values:")
-        for key in values:
-            print(str(key) + ": " + str(values[key]))
 
     print("-------------------")
 
