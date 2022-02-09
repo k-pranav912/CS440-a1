@@ -62,26 +62,3 @@ def min_heapify(list, index, graph_values):
     if smallest != index:
         list[smallest], list[index] = list[index], list[smallest]
         min_heapify(list, smallest, graph_values)
-
-# testing
-def main():
-    graph_vals = {1:(1,0), 2:(2,0), 3:(3,0), 4:(4,0), 5:(5,0), 6:{6,0}, 7:{7,0}, 8:{8,0}}
-    heap = []
-    print("heap: " + str(heap))
-    insert(heap, 8, graph_vals)
-    insert(heap, 7, graph_vals)
-    insert(heap, 6, graph_vals)
-    insert(heap, 5, graph_vals)
-    insert(heap, 4, graph_vals)
-    insert(heap, 3, graph_vals)
-    insert(heap, 2, graph_vals)
-    insert(heap, 1, graph_vals)
-    print(heap)
-    remove(heap, 2, graph_vals)
-    print(heap)
-    remove(heap, 5, graph_vals)
-    print(heap)
-    return
-
-if __name__ == "__main__":
-    main()

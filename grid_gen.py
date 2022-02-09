@@ -130,23 +130,3 @@ def gen_grid(path, vertex_list, neighbors):
             line = file.readline()
 
     return start, end, grid_max, cell_mat
-
-# testing purposes
-def main():
-    start, end, grid_max, cell_matrix = gen_grid("/common/home/sk2048/Desktop/cs440/a1/test/testfile1.txt", vertex_list, neighbors)
-    print("start vertex: " + str(start))
-    print("end vertex: " + str(end))
-    print("max dimensions: " + str(grid_max), end="\n\n")
-    print("cell matrix")
-    print(cell_matrix, end="\n\n")
-    vertex_list.sort()
-    print("vertex list: ", end="")
-    print(vertex_list)
-    print()
-    print("adjacency list:")
-    for key in neighbors:
-        print(str(key) + " : " + str(neighbors[key]))
-    return
-
-if __name__=="__main__":
-    main()
