@@ -13,8 +13,11 @@ There are sample files in the folder Grids. Grid0.txt is an example of a grid wi
 The user is reccomended to add testing grids to this folder to keep it organized, making the input "[Path to Folder]/Grids/[Grid Name].txt" for the file path
 
 The program then takes a single capital character to run a search or change files. 
+
     F: Allows the user to change the file for the grid
+    
     A: Runs A* search on the grid, then displays the resulting path on a GUI
+    
     T: Runs Theta* search on the grid, then displays the resulting path on a GUI
     
 GUI: 
