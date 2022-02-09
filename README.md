@@ -2,6 +2,8 @@ README
 
 This program runs search algorithms on a grid. 
 
+In order to run the program, change directory into the folder containing main.py, then run the main.py file (shell command: "python3 main.py").
+
 The program uses tkinter to display a GUI, so an appropriate compabitable software is needed to run this program.
 
 At any point the user may enter Q to quit.
