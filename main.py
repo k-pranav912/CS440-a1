@@ -84,10 +84,15 @@ def main():
     neighbors = {}
     parents = {}
     while (True):
-        userinput = input("Enter the full path to the file: ")
+        userinput = input("Enter the full path to the file, or Q to quit: ")
+        if userinput == "Q": return
         try:
             start, end, grid_max, cell_matrix = grid_gen.gen_grid(userinput, vertex_list, neighbors)
         except:
+            print("Invalid Path.")
+            continue
+        if not search_algorithms.bfs(start, end, neighbors, vertex_list):
+            print("No path found between the start and goal.")
             continue
         break
     
@@ -109,10 +114,15 @@ def main():
             neighbors = {}
             parents = {}
             while (True):
-                userinput = input("Enter the full path to the file: ")
+                userinput = input("Enter the full path to the file, or Q to quit: ")
+                if userinput == "Q": return
                 try:
                     start, end, grid_max, cell_matrix = grid_gen.gen_grid(userinput, vertex_list, neighbors)
                 except:
+                    print("Invalid Path.")
+                    continue
+                if not search_algorithms.bfs(start, end, neighbors, vertex_list):
+                    print("No path found between the start and goal.")
                     continue
                 break
             continue
