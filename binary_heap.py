@@ -59,9 +59,9 @@ def min_heapify(list, index, graph_values):
     right = right_child(index)
     smallest = index
 
-    if left < size - 1 and (get_f_value(list[left], graph_values) < get_f_value(list[index], graph_values)):
+    if left < size - 1 and (get_f_value(list[left], graph_values) < get_f_value(list[index], graph_values) or ((get_f_value(list[left], graph_values) == get_f_value(list[index], graph_values) and get_h_value(list[left], graph_values) < get_h_value(list[index], graph_values)))):
         smallest = left
-    if right < size - 1 and (get_f_value(list[right], graph_values) < get_f_value(list[smallest], graph_values)):
+    if right < size - 1 and (get_f_value(list[right], graph_values) < get_f_value(list[smallest], graph_values) or ((get_f_value(list[right], graph_values) == get_f_value(list[smallest], graph_values) and get_h_value(list[right], graph_values) < get_h_value(list[smallest], graph_values)))):
         smallest = right
     if smallest != index:
         list[smallest], list[index] = list[index], list[smallest]
