@@ -47,14 +47,16 @@ def update_vertex(vertex, successor, values, parent, fringe):
         bh.insert(fringe, successor, values)
 
 
-def a_star(start, end, neighbors):
+def a_star(start, end, neighbors, vertex_list):
     values = {}
-    visited = []
+    visited = {}
     parent = {}
     fringe = []
 
     values[start] = (0, heuristic_distance(start, end))
     parent[start] = start
+    for vertex in vertex_list:
+        visited[vertex] = False
 
     bh.insert(fringe, start, values)
 
@@ -62,13 +64,14 @@ def a_star(start, end, neighbors):
         temp_vertex = bh.pop(fringe, values)
         if (temp_vertex == end):
             return True, parent, values
-        visited.append(temp_vertex)
+        visited[temp_vertex] = True
         for successor in neighbors[temp_vertex]:
-            if successor not in visited:
+            if not visited[successor]:
                 if successor not in fringe:
                     values[successor] = (float("inf"), heuristic_distance(successor, end))
                     parent[successor] = None
                 update_vertex(temp_vertex, successor, values, parent, fringe)
+    
     
     return False, parent, values
 
@@ -142,14 +145,17 @@ def update_vertex_theta_star(vertex, successor, values, parent, fringe, cell_mat
                 bh.remove(fringe, successor, values)
             bh.insert(fringe, successor, values)
 
-def theta_star(start, end, neighbors, cell_mat):
+def theta_star(start, end, neighbors, cell_mat, vertex_list):
     values = {}
-    visited = []
+    visited = {}
     parent = {}
     fringe = []
 
     values[start] = (0, straight_line_distance(start, end))
     parent[start] = start
+
+    for vertex in vertex_list:
+        visited[vertex] = False
 
     bh.insert(fringe, start, values)
 
@@ -157,9 +163,9 @@ def theta_star(start, end, neighbors, cell_mat):
         temp_vertex = bh.pop(fringe, values)
         if (temp_vertex == end):
             return True, parent, values
-        visited.append(temp_vertex)
+        visited[temp_vertex] = True
         for successor in neighbors[temp_vertex]:
-            if successor not in visited:
+            if not visited[successor]:
                 if successor not in fringe:
                     values[successor] = (float("inf"), straight_line_distance(successor, end))
                     parent[successor] = None

@@ -22,13 +22,9 @@ def generate_random_grids():
         numCols = int(input())
 
 def print_random_grids():
-<<<<<<< HEAD
 
     begin = time.perf_counter()
     f = open("Grids/Time.csv", "w")
-=======
-    f = open("Grids/Time_old.csv", "w")
->>>>>>> a9a0e3215e306f617722a2c03bf7434e1d127914
     print("=======================")
     
     for i in range(50):
@@ -48,7 +44,7 @@ def print_random_grids():
         path = []
         for vertex in vertex_list:
             parents[vertex] = None
-        found, parent, values = search_algorithms.a_star(start, end, neighbors)
+        found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list)
         if not found:
             print("Not Found")
             return
@@ -80,7 +76,7 @@ def print_random_grids():
         start_time = time.perf_counter()
 
         path = []
-        found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix)
+        found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix, vertex_list)
         if not found:
             print("Not Found")
             return
@@ -107,8 +103,8 @@ def print_random_grids():
 
 
 def main():
-    run_UI()
-    # sprint_random_grids()
+    # run_UI()
+    print_random_grids()
 
 def run_UI():
     vertex_list = []
