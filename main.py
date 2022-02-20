@@ -3,6 +3,7 @@ from gen_rand_grid import generate_grid
 import grid_gen
 import search_algorithms
 import UI
+import time
 
 def generate_random_grids():
     numGrids = 0
@@ -21,6 +22,7 @@ def generate_random_grids():
         numCols = int(input())
 
 def print_random_grids():
+    start_time = time.perf_counter()
     print("=======================")
     for i in range(50):
         while True:
@@ -37,7 +39,7 @@ def print_random_grids():
         path = []
         for vertex in vertex_list:
             parents[vertex] = None
-        found, parent, values = search_algorithms.a_star(start, end, neighbors)
+        found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list)
         if not found:
             print("Not Found")
             return
@@ -51,18 +53,18 @@ def print_random_grids():
             for vert in path:
                 print(vert)
 
-        row, col = cell_matrix.shape
-        blocked_cell = []
-        for i in range(1, row-1):
-            for j in range(1, col-1):
-                if cell_matrix[i][j] == 1:
-                    blocked_cell.append((i, j))
-        UI.Grid(path,start,end,(100,50),blocked_cell,values).mainloop()
+        # row, col = cell_matrix.shape
+        # blocked_cell = []
+        # for i in range(1, row-1):
+        #     for j in range(1, col-1):
+        #         if cell_matrix[i][j] == 1:
+        #             blocked_cell.append((i, j))
+        # UI.Grid(path,start,end,(100,50),blocked_cell,values).mainloop()
 
         print("-----------------------")
 
         path = []
-        found, parent = search_algorithms.theta_star(start, end, neighbors, cell_matrix)
+        found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix, vertex_list)
         if not found:
             print("Not Found")
             return
@@ -78,8 +80,15 @@ def print_random_grids():
 
         print("=======================")
 
+        end_time = time.perf_counter()
+
+    print(f"{end_time - start_time:0.4f}")
+
 def main():
-    
+    # run_UI()
+    print_random_grids()
+
+def run_UI():
     vertex_list = []
     neighbors = {}
     parents = {}
@@ -104,10 +113,10 @@ def main():
         path = []
 
         if userinput == "A":
-            found, parent, values = search_algorithms.a_star(start, end, neighbors)
+            found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list)
 
         elif userinput == "T":
-            found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix)
+            found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix, vertex_list)
 
         elif userinput == "F":
             vertex_list = []
