@@ -39,7 +39,7 @@ def print_random_grids():
         path = []
         for vertex in vertex_list:
             parents[vertex] = None
-        found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list)
+        found, parent, values = search_algorithms.a_star(start, end, neighbors)
         if not found:
             print("Not Found")
             return
@@ -64,7 +64,7 @@ def print_random_grids():
         print("-----------------------")
 
         path = []
-        found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix, vertex_list)
+        found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix)
         if not found:
             print("Not Found")
             return
