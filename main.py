@@ -58,7 +58,8 @@ def print_random_grids():
 
         end_time = time.perf_counter()
 
-        f.write("Grid" + str(i+1) + ",A*," + f"{end_time - start_time:0.4f}" + "\n")
+        x,y = values[path[-1]]
+        f.write("Grid" + str(i+1) + ",A*," + f"{end_time - start_time:0.4f}," + str(x) + "\n")
 
         # row, col = cell_matrix.shape
         # blocked_cell = []
@@ -89,7 +90,8 @@ def print_random_grids():
 
         end_time = time.perf_counter()
 
-        f.write("Grid" + str(i+1) + ",T*," + f"{end_time - start_time:0.4f}" + "\n")
+        x,y = values[path[-1]]
+        f.write("Grid" + str(i+1) + ",T*," + f"{end_time - start_time:0.4f}," + str(x) + "\n")
         
         print("=======================")
 
