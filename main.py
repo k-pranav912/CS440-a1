@@ -22,8 +22,9 @@ def generate_random_grids():
         numCols = int(input())
 
 def print_random_grids():
-    start_time = time.perf_counter()
+    f = open("Grids/Time.csv", "w")
     print("=======================")
+    
     for i in range(50):
         while True:
             grid_path = "./Grids/Grid" + str(i+1) + ".txt"
@@ -34,6 +35,8 @@ def print_random_grids():
 
             if search_algorithms.bfs(start, end, neighbors, vertex_list):
                 break
+
+        start_time = time.perf_counter()
 
         parents = {}
         path = []
@@ -53,6 +56,10 @@ def print_random_grids():
             for vert in path:
                 print(vert)
 
+        end_time = time.perf_counter()
+
+        f.write("Grid" + str(i+1) + ",A*," + f"{end_time - start_time:0.4f}" + "\n")
+
         # row, col = cell_matrix.shape
         # blocked_cell = []
         # for i in range(1, row-1):
@@ -62,6 +69,8 @@ def print_random_grids():
         # UI.Grid(path,start,end,(100,50),blocked_cell,values).mainloop()
 
         print("-----------------------")
+
+        start_time = time.perf_counter()
 
         path = []
         found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix)
@@ -78,11 +87,13 @@ def print_random_grids():
             for vert in path:
                 print(vert)
 
-        print("=======================")
-
         end_time = time.perf_counter()
 
-    print(f"{end_time - start_time:0.4f}")
+        f.write("Grid" + str(i+1) + ",T*," + f"{end_time - start_time:0.4f}" + "\n")
+        
+        print("=======================")
+
+
 
 def main():
     # run_UI()
