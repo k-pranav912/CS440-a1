@@ -22,6 +22,8 @@ def generate_random_grids():
         numCols = int(input())
 
 def print_random_grids():
+
+    begin = time.perf_counter()
     f = open("Grids/Time.csv", "w")
     print("=======================")
     
@@ -94,6 +96,9 @@ def print_random_grids():
         f.write("Grid" + str(i+1) + ",T*," + f"{end_time - start_time:0.4f}," + str(x) + "\n")
         
         print("=======================")
+    ending = time.perf_counter()
+
+    f.write("Total," + f"{ending - begin:0.4f}")
 
 
 
