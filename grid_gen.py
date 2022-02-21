@@ -35,7 +35,7 @@ def gen_matrix(path):
             matrix[int(temp[1])][int(temp[0])] = int(temp[2])
             line = file.readline()
         
-    return matrix, grid_max
+    return matrix, grid_max, start, end
 
 
 # Each vertex is represented as a tuple, Vertex:(x, y)
@@ -50,7 +50,7 @@ def gen_matrix(path):
 # returns 3 tuples, start point, end point, and max grid dimensions
 def gen_grid(path, vertex_list, neighbors):
 
-    cell_mat, grid_max = gen_matrix(path)
+    cell_mat, grid_max, start, end = gen_matrix(path)
     with open(path) as file:
         line = file.readline()
         temp = line.split()
@@ -130,3 +130,131 @@ def gen_grid(path, vertex_list, neighbors):
             line = file.readline()
 
     return start, end, grid_max, cell_mat
+
+def line_of_sight(vertex1, vertex2, cell_mat):
+    x0, y0 = vertex1
+    x1, y1 = vertex2
+    f = 0
+    dY = y1-y0
+    dX = x1-x0
+
+    if dY < 0:
+        dY = 0-dY
+        sY = -1
+    else:
+        sY = 1
+
+    if dX < 0:
+        dX = 0-dX
+        sX = -1
+    else:
+        sX = 1
+
+    if dX >= dY:
+        while x0 != x1:
+            f += dY
+            if f >= dX:
+                if cell_mat[y0+((sY-1)//2)][x0 + ((sX-1)//2)]:
+                    return False
+                y0 += sY
+                f -= dX
+            if (f != 0) and cell_mat[y0+((sY-1)//2)][x0 + ((sX-1)//2)]:
+                return False
+            if (dY == 0) and cell_mat[y0][x0 + ((sX-1)//2)] and cell_mat[y0-1][x0 + ((sX-1)//2)]:
+                return False
+            x0 = x0 + sX
+    else:
+        while y0 != y1:
+            f += dX
+            if f >= dY:
+                if cell_mat[y0+((sY-1)//2)][x0+((sX-1)//2)]:
+                    return False
+                x0 += sX
+                f -= dY
+            if (f != 0) and cell_mat[y0+((sY-1)//2)][x0+((sX-1)//2)]:
+                return False
+            if (dX == 0) and cell_mat[y0+((sY-1)//2)][x0] and cell_mat[y0+((sY-1)//2)][x0-1]:
+                return False
+            y0 = y0+sY
+    return True
+
+def visibility_graph(cell_mat, start, end):
+    print("start: " + str(start))
+    print("end: " + str(end))
+    print(cell_mat)
+    vertex_list = []
+    neighbors = {}
+    neighbors[start] = []
+    neighbors[end] = []
+    vertex_list.append(start)
+    vertex_list.append(end)
+
+
+    max_rows, max_cols = cell_mat.shape
+
+    print("max rows: " + str(max_rows))
+    print("max_cols: " + str(max_cols))
+
+    for row in range(1,max_rows-1):
+        for col in range(1, max_cols-1):
+            print("index(row, col): " + str(row) + ", " + str(col))
+            if cell_mat[row][col] == 1:
+                print(True)
+                vertex1 = (col, row) # top left
+                vertex2 = (col+1, row) # top right
+                vertex3 = (col, row+1) # bottom left
+                vertex4 = (col+1, row+1) # bottom right
+                print(vertex1, vertex2, vertex3, vertex4)
+
+                try:
+                    temp = neighbors[vertex1]
+                except KeyError:
+                    neighbors[vertex1] = []
+                    vertex_list.append(vertex1)
+                
+                try:
+                    temp = neighbors[vertex2]
+                except KeyError:
+                    neighbors[vertex2] = []
+                    vertex_list.append(vertex2)
+
+                try:
+                    temp = neighbors[vertex3]
+                except KeyError:
+                    neighbors[vertex3] = []
+                    vertex_list.append(vertex3)
+
+                try:
+                    temp = neighbors[vertex4]
+                except KeyError:
+                    neighbors[vertex4] = []
+                    vertex_list.append(vertex4)
+    
+    print(vertex_list)
+    
+    for source in vertex_list:
+        for target in vertex_list:
+            if source != target:
+                print(source, target, end=" ")
+                if line_of_sight(source, target, cell_mat):
+                    print("yay")
+                    neighbors[source].append(target)
+                else:
+                    print()
+                
+    
+    return vertex_list, neighbors
+
+def main():
+    path = "/common/home/sk2048/Desktop/cs440/a1/Grids/grid_test_1.txt"
+    cell_mat, grid_max, start, end = gen_matrix(path)
+    vertex_list, neighbors = visibility_graph(cell_mat, start, end)
+    print("vertices")
+    print(vertex_list)
+    print("neighbors")
+    for element in neighbors:
+        print(str(element) + ": " + str(neighbors[element]))
+    return
+
+if __name__ == "__main__":
+    main()
