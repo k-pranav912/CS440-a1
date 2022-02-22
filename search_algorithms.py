@@ -2,6 +2,9 @@ import binary_heap as bh
 import math
 import grid_gen
 
+def dummy_heuristic(vertex1, vertex2):
+    return 0
+
 def bfs(start, end, neighbors, vertex_list):
     if start == end: return True
     queue = []
@@ -47,13 +50,13 @@ def update_vertex(vertex, successor, values, parent, fringe):
         bh.insert(fringe, successor, values)
 
 
-def a_star(start, end, neighbors, vertex_list):
+def a_star(start, end, neighbors, vertex_list, heuristic=heuristic_distance):
     values = {}
     visited = {}
     parent = {}
     fringe = []
 
-    values[start] = (0, heuristic_distance(start, end))
+    values[start] = (0, heuristic(start, end))
     parent[start] = start
     for vertex in vertex_list:
         visited[vertex] = False
@@ -68,7 +71,7 @@ def a_star(start, end, neighbors, vertex_list):
         for successor in neighbors[temp_vertex]:
             if not visited[successor]:
                 if successor not in fringe:
-                    values[successor] = (float("inf"), heuristic_distance(successor, end))
+                    values[successor] = (float("inf"), heuristic(successor, end))
                     parent[successor] = None
                 update_vertex(temp_vertex, successor, values, parent, fringe)
     
@@ -172,3 +175,28 @@ def theta_star(start, end, neighbors, cell_mat, vertex_list):
                 update_vertex_theta_star(temp_vertex, successor, values, parent, fringe, cell_mat)
     
     return False, parent, values
+
+def main():
+    path = "/common/home/sk2048/Desktop/cs440/a1/Grids/grid_test_1.txt"
+    cell_mat, grid_max, start, end = grid_gen.gen_matrix(path)
+    print("start: " + str(start))
+    print("end: " + str(end))
+    vertex_list, neighbors = grid_gen.visibility_graph(cell_mat, start, end)
+    print("vertices")
+    print(vertex_list)
+    print("neighbors")
+    for element in neighbors:
+        print(str(element) + ": " + str(neighbors[element]))
+
+    result, parent, values = a_star(start, end, neighbors, vertex_list, dummy_heuristic)
+    print(result)
+    ptr = end
+    while ptr != start:
+        print(ptr)
+        ptr = parent[ptr]
+    print(start)
+
+    return
+
+if __name__ == "__main__":
+    main()

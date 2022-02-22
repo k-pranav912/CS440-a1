@@ -179,9 +179,9 @@ def line_of_sight(vertex1, vertex2, cell_mat):
     return True
 
 def visibility_graph(cell_mat, start, end):
-    print("start: " + str(start))
-    print("end: " + str(end))
-    print(cell_mat)
+    # print("start: " + str(start))
+    # print("end: " + str(end))
+    # print(cell_mat)
     vertex_list = []
     neighbors = {}
     neighbors[start] = []
@@ -192,19 +192,19 @@ def visibility_graph(cell_mat, start, end):
 
     max_rows, max_cols = cell_mat.shape
 
-    print("max rows: " + str(max_rows))
-    print("max_cols: " + str(max_cols))
+    # print("max rows: " + str(max_rows))
+    # print("max_cols: " + str(max_cols))
 
     for row in range(1,max_rows-1):
         for col in range(1, max_cols-1):
-            print("index(row, col): " + str(row) + ", " + str(col))
+            # print("index(row, col): " + str(row) + ", " + str(col))
             if cell_mat[row][col] == 1:
-                print(True)
+                # print(True)
                 vertex1 = (col, row) # top left
                 vertex2 = (col+1, row) # top right
                 vertex3 = (col, row+1) # bottom left
                 vertex4 = (col+1, row+1) # bottom right
-                print(vertex1, vertex2, vertex3, vertex4)
+                # print(vertex1, vertex2, vertex3, vertex4)
 
                 try:
                     temp = neighbors[vertex1]
@@ -230,17 +230,17 @@ def visibility_graph(cell_mat, start, end):
                     neighbors[vertex4] = []
                     vertex_list.append(vertex4)
     
-    print(vertex_list)
+    # print(vertex_list)
     
     for source in vertex_list:
         for target in vertex_list:
             if source != target:
-                print(source, target, end=" ")
+                # print(source, target, end=" ")
                 if line_of_sight(source, target, cell_mat):
-                    print("yay")
+                    # print("yay")
                     neighbors[source].append(target)
-                else:
-                    print()
+                # else:
+                   # print()
                 
     
     return vertex_list, neighbors
