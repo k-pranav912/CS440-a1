@@ -103,8 +103,8 @@ def print_random_grids():
 
 
 def main():
-    # run_UI()
-    print_random_grids()
+    run_UI()
+    # print_random_grids()
 
 def run_UI():
     vertex_list = []
@@ -131,7 +131,7 @@ def run_UI():
         path = []
 
         if userinput == "A":
-            found, parent, values = search_algorithms.a_star(start, end, neighbors)
+            found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list)
 
         elif userinput == "T":
             found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix)

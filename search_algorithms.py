@@ -1,6 +1,7 @@
 import binary_heap as bh
 import math
 import grid_gen
+import UI
 
 def dummy_heuristic(vertex1, vertex2):
     return 0
@@ -195,6 +196,24 @@ def main():
         print(ptr)
         ptr = parent[ptr]
     print(start)
+
+    result_path = []
+    temp = end
+    while not temp == start:
+        result_path.append(temp)
+        temp = parent[temp]
+    result_path.append(temp)
+    result_path.reverse()
+
+    row, col = cell_mat.shape
+    blocked_cell = []
+    for i in range(1, row-1):
+        for j in range(1, col-1):
+            if cell_mat[i][j] == 1:
+                blocked_cell.append((i, j))
+        
+
+        UI.Grid(result_path,start,end,grid_max,blocked_cell,values).mainloop()
 
     return
 
