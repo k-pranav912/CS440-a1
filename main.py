@@ -216,6 +216,9 @@ def run_UI():
         elif userinput == "Q":
             return
 
+        else:
+            print("Invalid Input")
+
         if not found:
             print("Not Found")
             return
