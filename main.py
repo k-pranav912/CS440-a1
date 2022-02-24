@@ -115,6 +115,7 @@ def run_UI():
         if userinput == "Q": return
         try:
             start, end, grid_max, cell_matrix = grid_gen.gen_grid(userinput, vertex_list, neighbors)
+            grid_path = userinput
         except:
             print("Invalid Path.")
             continue
@@ -125,7 +126,7 @@ def run_UI():
     
 
     while (True):
-        userinput = input("Enter A for A* search, T for Theta* search, F to change file, or Q to quit: ")
+        userinput = input("Enter A for A* search, T for Theta* search, V for true-minimal path, F to change file, or Q to quit: ")
         for vertex in vertex_list:
             parents[vertex] = None
         path = []
@@ -134,7 +135,12 @@ def run_UI():
             found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list)
 
         elif userinput == "T":
-            found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix)
+            found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix, vertex_list)
+
+        elif userinput == "V":
+            cell_mat, grid_max, start, end = grid_gen.gen_matrix(grid_path)
+            vertex_list, neighbors = grid_gen.visibility_graph(cell_mat, start, end)
+            found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list, search_algorithms.dummy_heuristic)
 
         elif userinput == "F":
             vertex_list = []
