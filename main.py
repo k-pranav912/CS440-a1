@@ -100,11 +100,64 @@ def print_random_grids():
 
     f.write("Total," + f"{ending - begin:0.4f}")
 
+def check_list_equal(list1, list2):
+    if len(list1) != len(list2):
+        return False
 
+    for i in range(len(list1)):
+        if list1[i] != list2[i]:
+            return False
+    
+    return True
+
+def test_t_star():
+    path = "/common/home/sk2048/Desktop/cs440/a1/Grids/Grid"
+
+    index = input("Enter grid number: ")
+    temp_path = path + index + ".txt"
+    vertex_list = []
+    neighbors = {}
+    start, end, grid_max, cell_matrix = grid_gen.gen_grid(temp_path, vertex_list, neighbors)
+
+    if not search_algorithms.bfs(start, end, neighbors, vertex_list):
+        return False
+
+    t_path = []
+    found, parent, values = search_algorithms.theta_star(start, end, neighbors, cell_matrix, vertex_list)
+    if not found:
+        print("Not Found")
+        return False
+    else:
+        temp = end
+        while not temp == start:
+            t_path.append(temp)
+            temp = parent[temp]
+        t_path.append(temp)
+        t_path.reverse()
+
+    v_path = []
+    cell_mat, grid_max, start, end = grid_gen.gen_matrix(temp_path)
+    vertex_list, neighbors = grid_gen.visibility_graph(cell_mat, start, end)
+    found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list, search_algorithms.dummy_heuristic)
+    if not found:
+        print("Not Found")
+        return False
+    else:
+        temp = end
+        while not temp == start:
+            v_path.append(temp)
+            temp = parent[temp]
+        v_path.append(temp)
+        v_path.reverse()
+
+    result = check_list_equal(v_path, t_path)
+
+    print("Grid" + index + " : " + str(result))
 
 def main():
     run_UI()
     # print_random_grids()
+    # test_t_star()
 
 def run_UI():
     vertex_list = []
