@@ -184,7 +184,10 @@ def run_UI():
             parents[vertex] = None
         path = []
 
-        if userinput == "A":
+        if userinput not in ["A", "T", "V", "F", "Q"]:
+            print("Invalid Input")
+            continue
+        elif userinput == "A":
             found, parent, values = search_algorithms.a_star(start, end, neighbors, vertex_list)
 
         elif userinput == "T":
@@ -215,9 +218,6 @@ def run_UI():
 
         elif userinput == "Q":
             return
-
-        else:
-            print("Invalid Input")
 
         if not found:
             print("Not Found")
