@@ -244,17 +244,3 @@ def visibility_graph(cell_mat, start, end):
                 
     
     return vertex_list, neighbors
-
-def main():
-    path = "/common/home/sk2048/Desktop/cs440/a1/Grids/grid_test_1.txt"
-    cell_mat, grid_max, start, end = gen_matrix(path)
-    vertex_list, neighbors = visibility_graph(cell_mat, start, end)
-    print("vertices")
-    print(vertex_list)
-    print("neighbors")
-    for element in neighbors:
-        print(str(element) + ": " + str(neighbors[element]))
-    return
-
-if __name__ == "__main__":
-    main()

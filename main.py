@@ -30,7 +30,7 @@ def print_random_grids():
     for i in range(50):
         while True:
             grid_path = "./Grids/Grid" + str(i+1) + ".txt"
-            # generate_grid(numRows, numCols, grid_path)
+            # generate_grid(numRows, numCols, grid_path) # uncomment this line to generate new grids.
             vertex_list = []
             neighbors = {}
             start, end, grid_max, cell_matrix = grid_gen.gen_grid(grid_path, vertex_list, neighbors)
@@ -62,14 +62,6 @@ def print_random_grids():
 
         x,y = values[path[-1]]
         f.write("Grid" + str(i+1) + ",A*," + f"{end_time - start_time:0.4f}," + str(x) + "\n")
-
-        # row, col = cell_matrix.shape
-        # blocked_cell = []
-        # for i in range(1, row-1):
-        #     for j in range(1, col-1):
-        #         if cell_matrix[i][j] == 1:
-        #             blocked_cell.append((i, j))
-        # UI.Grid(path,start,end,(100,50),blocked_cell,values).mainloop()
 
         print("-----------------------")
 
@@ -111,7 +103,7 @@ def check_list_equal(list1, list2):
     return True
 
 def test_t_star():
-    path = "/common/home/sk2048/Desktop/cs440/a1/Grids/Grid"
+    path = "/Grids/Grid"
 
     index = input("Enter grid number: ")
     temp_path = path + index + ".txt"
@@ -153,11 +145,6 @@ def test_t_star():
     result = check_list_equal(v_path, t_path)
 
     print("Grid" + index + " : " + str(result))
-
-def main():
-    run_UI()
-    # print_random_grids()
-    # test_t_star()
 
 def run_UI():
     vertex_list = []
@@ -239,6 +226,11 @@ def run_UI():
         
 
         UI.Grid(path,start,end,grid_max,blocked_cell,values).mainloop()
+
+def main():
+    run_UI()
+    # print_random_grids() # runs through the 50 grids with a* and theta* and exports running time to a file.
+    # test_t_star() # used to test whether theta* actually finds the true minimal path.
 
 if __name__ == "__main__":
     main()
